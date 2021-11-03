@@ -1,0 +1,55 @@
+name: code coverage
+
+on: 
+  schedule:
+    - cron: '0 2 * * *'
+  push:
+  
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup env variables
+        run: |
+          REPO=${GITHUB_REPOSITORY#*/}
+          echo "REPO=${REPO%-coverage}" >> $GITHUB_ENV
+          echo "PYTHONPATH=$(pwd)/repo/install" >> $GITHUB_ENV
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          repository: 'scipp/${{ env.REPO }}'
+          path: repo
+          submodules: true
+          fetch-depth: 0  # history required so cmake can determine version
+
+      - name: Setup conda env file
+        run: |
+          cp repo/$REPO-developer.yml env.yml
+          echo "  - pytest-cov" >> env.yml
+
+      - name: Setup Mambaforge and dev env
+        uses: conda-incubator/setup-miniconda@v2.1.1
+        with:
+          miniforge-version: latest
+          miniforge-variant: Mambaforge
+          environment-file: env.yml
+          activate-environment: ${{ env.REPO }}-developer
+          auto-activate-base: false
+
+      - name: Python coverage
+        shell: bash -l {0}
+        run: |
+          cd repo/tests
+          pytest --cov=$REPO --cov-report html:../../coverage_html .
+          rm -f ../../coverage_html/.gitignore
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: gh-pages
+          folder: coverage_html
