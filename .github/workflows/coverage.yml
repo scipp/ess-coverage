@@ -17,7 +17,7 @@ jobs:
         run: |
           REPO=${GITHUB_REPOSITORY#*/}
           echo "REPO=${REPO%-coverage}" >> $GITHUB_ENV
-          echo "PYTHONPATH=$(pwd)/repo/install" >> $GITHUB_ENV
+          echo "PYTHONPATH=$(pwd)/repo/src" >> $GITHUB_ENV
 
       - name: Checkout repo
         uses: actions/checkout@v2
