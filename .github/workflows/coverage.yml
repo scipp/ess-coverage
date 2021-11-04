@@ -53,3 +53,4 @@ jobs:
         with:
           branch: gh-pages
           folder: coverage_html
+          single-commit: true
