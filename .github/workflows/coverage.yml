@@ -30,8 +30,6 @@ jobs:
       - name: Setup conda env file
         run: |
           cp repo/$REPO-developer.yml env.yml
-          cat env.yml | grep -v scippneutron
-          echo "  - scippneutron=0.3.*" >> env.yml
           echo "  - pytest-cov" >> env.yml
 
       - name: Setup Mambaforge and dev env
