@@ -1,10 +1,10 @@
 name: code coverage
 
-on: 
+on:
   schedule:
     - cron: '0 2 * * *'
   push:
-  
+
 
 jobs:
   coverage:
@@ -29,7 +29,7 @@ jobs:
 
       - name: Setup conda env file
         run: |
-          python metatoenv.py --dir=repo/conda --env-file=buildenv.yml --channels=conda-forge,scipp,ess-dmsc
+          python metatoenv.py --dir=repo/conda --env-file=buildenv.yml --channels=conda-forge,scipp,ess-dmsc,mantid
           echo "  - pytest-cov" >> buildenv.yml
 
       - name: Setup Mambaforge and dev env
