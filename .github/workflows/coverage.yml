@@ -1,10 +1,10 @@
 name: code coverage
 
-on: 
+on:
   schedule:
     - cron: '0 2 * * *'
   push:
-  
+
 
 jobs:
   coverage:
